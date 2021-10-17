@@ -1,3 +1,8 @@
+import styles from './header.module.scss';
 export default function Header() {
-  // TODO
+  return (
+    <div className={styles.header}>
+      <img src="/img/Logo.svg" />
+    </div>
+  );
 }
