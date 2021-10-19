@@ -1,1 +1,98 @@
-// TODO
+.post {
+  max-width: 700px;
+  width: 100%;
+  margin: 80px auto;
+
+  h1 {
+    font-family: Inter;
+    font-style: normal;
+    font-weight: bold;
+    font-size: 48px;
+    line-height: 58px;
+
+    letter-spacing: -0.5px;
+
+    color: #f8f8f8;
+  }
+}
+
+.banner {
+  max-width: 100vw;
+  width: 100%;
+  height: 400px;
+}
+
+.postInfos {
+  display: flex;
+  margin-top: 24px;
+  span {
+    display: flex;
+    align-items: center;
+    img {
+      height: 20px;
+    }
+    p,
+    time {
+      margin: 0;
+      font-family: Inter;
+      font-style: normal;
+      font-weight: normal;
+      font-size: 14px;
+      line-height: 17px;
+      color: #bbbbbb;
+    }
+    time {
+      text-transform: capitalize;
+    }
+  }
+  span + span {
+    margin-left: 24px;
+  }
+}
+
+.postContent {
+  h2 {
+    font-family: Inter;
+    font-style: normal;
+    font-weight: bold;
+    font-size: 36px;
+    line-height: 50px;
+    /* or 50px */
+
+    text-align: justify;
+
+    /* Heading */
+
+    color: #f8f8f8;
+  }
+  p {
+    font-family: Inter;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 18px;
+    line-height: 50px;
+    /* or 25px */
+
+    text-align: justify;
+
+    /* Body */
+
+    color: #d7d7d7;
+  }
+
+  strong,
+  a {
+    font-family: Inter;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 18px;
+    line-height: 140%;
+    /* or 25px */
+
+    text-align: justify;
+
+    /* Highlight */
+
+    color: #ff57b2;
+  }
+}
