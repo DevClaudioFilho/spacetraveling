@@ -12,6 +12,7 @@ import styles from './home.module.scss';
 import format from 'date-fns/format';
 import ptBR from 'date-fns/locale/pt-BR';
 import { parseISO } from 'date-fns';
+import { useEffect, useState } from 'react';
 
 interface Post {
   uid?: string;
@@ -33,10 +34,38 @@ interface HomeProps {
 }
 
 export default function Home({ postsPagination }: HomeProps) {
+  const [posts, setPosts] = useState<Post[]>([]);
+  const [nextPage, setNextPage] = useState('');
+
+  useEffect(() => {
+    setPosts(postsPagination.results);
+    setNextPage(postsPagination.next_page);
+  }, [postsPagination.results, postsPagination.next_page]);
+
+  function handlePagination(): void {
+    fetch(nextPage)
+      .then(res => res.json())
+      .then(data => {
+        const formattedData = data.results.map(post => {
+          return {
+            uid: post.uid,
+            first_publication_date: post.first_publication_date,
+            data: {
+              title: post.data.title,
+              subtitle: post.data.subtitle,
+              author: post.data.author,
+            },
+          };
+        });
+
+        setPosts([...posts, ...formattedData]);
+        setNextPage(data.next_page);
+      });
+  }
   return (
     <div className={styles.home}>
       <Header />
-      {postsPagination.results.map(post => (
+      {posts.map(post => (
         <Link key={post.uid} href={`/post/${post.uid}`}>
           <a className={styles.post}>
             <h1>{post.data.title}</h1>
@@ -62,18 +91,28 @@ export default function Home({ postsPagination }: HomeProps) {
           </a>
         </Link>
       ))}
+
+      {nextPage && (
+        <button type="button" onClick={handlePagination}>
+          Carregar mais posts
+        </button>
+      )}
     </div>
   );
 }
 
-export const getStaticProps = async () => {
+export const getStaticProps: GetStaticProps<HomeProps> = async ({
+  preview = false,
+  previewData,
+}) => {
   const prismic = getPrismicClient();
+
   const postsResponse = await prismic.query(
     [Prismic.predicates.at('document.type', 'post')],
     {
       fetch: ['post.title', 'post.subtitle', 'post.author'],
       pageSize: 20,
-      ref: null,
+      ref: previewData?.ref ?? null,
     }
   );
 
@@ -95,7 +134,7 @@ export const getStaticProps = async () => {
         next_page: postsResponse.next_page,
         results: posts,
       },
+      preview,
     },
-    revalidate: 60 * 60 * 24, //24h
   };
 };
